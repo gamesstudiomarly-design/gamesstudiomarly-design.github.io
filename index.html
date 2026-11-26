@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Marly's Dev Tools | Roblox & AI Projects</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Open-source tools for Roblox Studio, AI integration, and game development by gamesstudiomarly-design.">
+<style>
+  :root {
+    --bg: #0b0d14;
+    --panel: #161925;
+    --panel-hover: #1d2130;
+    --text: #e6e8f0;
+    --muted: #8b90a8;
+    --accent: #7c5cff;
+    --accent-2: #22d3ee;
+    --border: #262a3a;
+    --radius: 12px;
+    --shadow: 0 10px 30px rgba(0,0,0,.5);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: radial-gradient(1200px 600px at 20% -10%, rgba(124,92,255,.15), transparent 60%),
+                radial-gradient(1000px 500px at 100% 0%, rgba(34,211,238,.1), transparent 60%),
+                var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+  }
+  
+  /* Header */
+  header { text-align: center; padding: 80px 20px 40px; }
+  h1 {
+    font-size: 52px; margin: 0 0 10px; letter-spacing: -1px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  p.subtitle { font-size: 18px; color: var(--muted); max-width: 600px; margin: 0 auto; line-height: 1.6; }
+  
+  /* Layout */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; flex: 1; width: 100%; }
+  .section-title { 
+    font-size: 22px; margin: 40px 0 20px; border-bottom: 1px solid var(--border); 
+    padding-bottom: 12px; display: flex; align-items: center; gap: 10px;
+  }
+  
+  /* Latest Release Box */
+  .release-box {
+    background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 30px; box-shadow: var(--shadow); position: relative; overflow: hidden;
+  }
+  .release-box::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+    background: linear-gradient(to bottom, var(--accent), var(--accent-2));
+  }
+  .release-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+  .release-title { font-size: 24px; margin: 0; font-weight: 700; }
+  .release-tag { background: rgba(124,92,255,.2); color: var(--accent); border: 1px solid var(--accent); padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; }
+  .release-meta { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+  .release-notes { 
+    background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 14px; line-height: 1.7; 
+    white-space: pre-wrap; color: #c7cbe0; margin-bottom: 25px;
+  }
+  .downloads { display: flex; gap: 12px; flex-wrap: wrap; }
+  .dl-btn {
+    display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--accent), #6b4dff);
+    color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; font-size: 15px;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .dl-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(124,92,255,.4); }
+  .dl-btn-secondary { background: var(--panel-hover); border: 1px solid var(--border); color: var(--text); }
+  .dl-btn-secondary:hover { border-color: var(--accent); box-shadow: none; }
+  
+  /* Project Grid */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 24px; text-decoration: none; color: inherit; display: flex; flex-direction: column;
+    transition: transform .2s, border-color .2s, box-shadow .2s;
+  }
+  .card:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: var(--shadow); }
+  .card h3 { margin: 0 0 10px; color: var(--text); font-size: 20px; display: flex; justify-content: space-between; align-items: center; }
+  .card h3 span { font-size: 12px; color: var(--accent-2); background: rgba(34,211,238,.1); padding: 2px 8px; border-radius: 4px; }
+  .card p { color: var(--muted); font-size: 14px; line-height: 1.6; flex: 1; margin: 0 0 20px; }
+  .card-stats { display: flex; gap: 16px; font-size: 13px; color: var(--muted); margin-bottom: 20px; font-weight: 500; }
+  .card-btn {
+    display: block; text-align: center; background: rgba(124,92,255,.1); color: var(--accent);
+    padding: 10px; border-radius: 8px; font-weight: bold; border: 1px solid rgba(124,92,255,.3);
+    transition: background .2s;
+  }
+  .card:hover .card-btn { background: rgba(124,92,255,.2); border-color: var(--accent); }
+  
+  /* Loading & Error */
+  .loading { text-align: center; color: var(--muted); padding: 40px; font-size: 15px; }
+  .error-msg { color: #ef4444; background: rgba(239,68,68,.1); border: 1px solid #ef4444; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+
+  /* Footer */
+  footer { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--border); }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+  .pulse { animation: pulse 2s infinite; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Marly's Dev Tools</h1>
+  <p class="subtitle">Open-source tools for Roblox Studio, AI integration, and game development. Created by <a href="https://github.com/gamesstudiomarly-design" target="_blank" style="color:var(--accent); text-decoration:none;">@gamesstudiomarly-design</a>.</p>
+</header>
+
+<div class="container">
+  
+  <!-- LATEST RELEASE SECTION -->
+  <h2 class="section-title">🚀 Latest Release & What's New</h2>
+  <div id="release-container" class="loading pulse">Fetching latest release from GitHub...</div>
+
+  <!-- ALL PROJECTS SECTION -->
+  <h2 class="section-title">📦 My Projects</h2>
+  <div id="projects-container" class="grid">
+    <div class="loading pulse" style="grid-column: 1 / -1;">Loading repositories...</div>
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2026 Marly's Dev Tools. Built for the Roblox community.</p>
+  <p><a href="https://github.com/gamesstudiomarly-design" target="_blank">View all projects on GitHub →</a></p>
+</footer>
+
+<script>
+// ==========================================
+// CONFIGURATION
+// ==========================================
+const GITHUB_USERNAME = "gamesstudiomarly-design";
+const MAIN_REPO = "ZeroScript-2.0";
+
+// ==========================================
+// 1. Fetch and Render Latest Release
+// ==========================================
+async function loadLatestRelease() {
+  const container = document.getElementById('release-container');
+  try {
+    const res = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${MAIN_REPO}/releases/latest`);
+    
+    if (!res.ok) throw new Error("No releases found");
+    
+    const release = await res.json();
+    
+    // Format release notes (basic markdown parsing for links)
+    let notes = release.body || "No release notes provided.";
+    notes = notes.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                 .replace(/^- (.*?)$/gm, '• $1');
+
+    // Format download buttons
+    let downloadsHtml = "";
+    if (release.assets && release.assets.length > 0) {
+      downloadsHtml = release.assets.map(asset => {
+        const sizeMb = (asset.size / 1024 / 1024).toFixed(1);
+        return `<a href="${asset.browser_download_url}" class="dl-btn" target="_blank">
+                  ⬇ Download ${asset.name} (${sizeMb} MB)
+                </a>`;
+      }).join('');
+    } else {
+      downloadsHtml = `<a href="${release.html_url}" class="dl-btn dl-btn-secondary" target="_blank">View Release on GitHub</a>`;
+    }
+
+    container.classList.remove('loading', 'pulse');
+    container.innerHTML = `
+      <div class="release-box">
+        <div class="release-header">
+          <h3 class="release-title">${release.name || "New Update"}</h3>
+          <span class="release-tag">${release.tag_name}</span>
+        </div>
+        <div class="release-meta">Published on ${new Date(release.published_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+        
+        <div class="release-notes">${notes}</div>
+        
+        <div class="downloads">
+          ${downloadsHtml}
+          <a href="https://github.com/${GITHUB_USERNAME}/${MAIN_REPO}" class="dl-btn dl-btn-secondary" target="_blank">
+            📁 Source Code
+          </a>
+        </div>
+      </div>
+    `;
+  } catch (e) {
+    container.classList.remove('pulse');
+    container.innerHTML = `
+      <div class="release-box">
+        <div class="error-msg">Could not load the latest release (API rate limit or network issue).</div>
+        <div class="downloads">
+          <a href="https://github.com/${GITHUB_USERNAME}/${MAIN_REPO}/releases" class="dl-btn" target="_blank">
+            View Releases on GitHub
+          </a>
+        </div>
+      </div>
+    `;
+  }
+}
+
+// ==========================================
+// 2. Fetch and Render Projects
+// ==========================================
+async function loadProjects() {
+  const container = document.getElementById('projects-container');
+  try {
+    const res = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=6`);
+    
+    if (!res.ok) throw new Error("API Limit");
+    
+    const repos = await res.json();
+    
+    if (repos.length === 0) {
+      container.innerHTML = `<p class="loading" style="grid-column: 1/-1;">No public repositories found.</p>`;
+      return;
+    }
+
+    container.innerHTML = repos.map(repo => {
+      // Don't show the github.io portfolio repo in the grid
+      if (repo.name.includes(".github.io")) return "";
+      
+      const desc = repo.description || "No description provided.";
+      const lang = repo.language ? `<span>💻 ${repo.language}</span>` : "";
+      
+      return `
+        <a href="${repo.html_url}" target="_blank" class="card">
+          <h3>${repo.name} <span>${repo.visibility}</span></h3>
+          <p>${desc}</p>
+          <div class="card-stats">
+            <span>⭐ ${repo.stargazers_count} Stars</span>
+            <span>🍴 ${repo.forks_count} Forks</span>
+            ${lang}
+          </div>
+          <div class="card-btn">View Repository</div>
+        </a>
+      `;
+    }).join('');
+  } catch (e) {
+    // Fallback UI if the API is rate limited
+    container.innerHTML = `
+      <div style="grid-column: 1/-1; text-align: center; padding: 20px;">
+        <p class="error-msg" style="display:inline-block;">GitHub API rate limit reached. Please try again later.</p>
+        <br>
+        <a href="https://github.com/${GITHUB_USERNAME}" class="dl-btn" target="_blank">View Profile on GitHub</a>
+      </div>
+    `;
+  }
+}
+
+// Initialize
+loadLatestRelease();
+loadProjects();
+</script>
+</body>
+</html>
