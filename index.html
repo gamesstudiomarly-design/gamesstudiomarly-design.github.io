@@ -9,7 +9,7 @@
     --bg: #0b0d14; --panel: #161925; --panel-hover: #1d2130;
     --text: #e6e8f0; --muted: #8b90a8; --accent: #7c5cff;
     --accent-2: #22d3ee; --border: #262a3a; --radius: 12px;
-    --shadow: 0 10px 30px rgba(0,0,0,.5); --err: #ef4444; --ok: #22c55e;
+    --shadow: 0 10px 30px rgba(0,0,0,.5); --err: #ef4444; --ok: #22c55e; --warn: #f59e0b;
   }
   * { box-sizing: border-box; }
   body {
@@ -18,8 +18,6 @@
                 radial-gradient(1000px 500px at 100% 0%, rgba(34,211,238,.1), transparent 60%),
                 var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column;
   }
-  
-  /* Navbar & Header */
   nav {
     display: flex; justify-content: space-between; align-items: center;
     padding: 20px 40px; background: rgba(22, 25, 37, 0.8); border-bottom: 1px solid var(--border);
@@ -28,16 +26,11 @@
   .logo { font-size: 20px; font-weight: 800; background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; color: transparent; }
   .nav-btn { background: transparent; color: var(--text); border: 1px solid var(--border); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
   .nav-btn:hover { border-color: var(--accent); color: var(--accent); }
-  
   header { text-align: center; padding: 60px 20px 40px; }
   h1 { font-size: 52px; margin: 0 0 10px; letter-spacing: -1px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; color: transparent; }
   p.subtitle { font-size: 18px; color: var(--muted); max-width: 600px; margin: 0 auto; }
-  
-  /* Layout */
   .container { max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; flex: 1; width: 100%; }
   .section-title { font-size: 22px; margin: 40px 0 20px; border-bottom: 1px solid var(--border); padding-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
-  
-  /* Latest Release Box */
   .release-box { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 30px; box-shadow: var(--shadow); position: relative; overflow: hidden; }
   .release-box::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, var(--accent), var(--accent-2)); }
   .release-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
@@ -47,8 +40,6 @@
   .downloads { display: flex; gap: 12px; flex-wrap: wrap; }
   .dl-btn { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--accent), #6b4dff); color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; transition: transform .2s; }
   .dl-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(124,92,255,.4); }
-  
-  /* Grid & Cards */
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
   .card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; text-decoration: none; color: inherit; display: flex; flex-direction: column; transition: 0.2s; position: relative; }
   .card:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: var(--shadow); }
@@ -56,30 +47,36 @@
   .card p { color: var(--muted); font-size: 14px; line-height: 1.6; flex: 1; margin: 0 0 20px; }
   .card-stats { display: flex; gap: 16px; font-size: 13px; color: var(--muted); margin-bottom: 20px; }
   .card-btn { display: block; text-align: center; background: rgba(124,92,255,.1); color: var(--accent); padding: 10px; border-radius: 8px; font-weight: bold; border: 1px solid rgba(124,92,255,.3); }
-  
-  /* Admin Panel */
   #admin-panel { display: none; background: var(--panel); border: 2px dashed var(--accent); border-radius: var(--radius); padding: 30px; margin-bottom: 40px; }
   #admin-panel h2 { margin-top: 0; color: var(--accent-2); }
+  .admin-section { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+  .admin-section h3 { margin: 0 0 15px; color: var(--accent); font-size: 16px; }
   .form-group { margin-bottom: 15px; }
   .form-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
-  .form-group input, .form-group textarea { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-family: inherit; }
+  .form-group input, .form-group textarea { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-family: inherit; font-size: 14px; }
   .form-group textarea { resize: vertical; height: 80px; }
-  .btn-save { background: var(--ok); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px; }
+  .form-group small { display: block; color: var(--muted); font-size: 12px; margin-top: 5px; }
+  .btn-save { background: var(--ok); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 15px; }
   .btn-save:hover { opacity: 0.9; }
+  .btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-secondary { background: var(--panel-hover); color: var(--text); border: 1px solid var(--border); padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; }
+  .btn-secondary:hover { border-color: var(--accent); }
   .btn-delete { background: var(--err); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; position: absolute; top: 10px; right: 10px; z-index: 10; }
-  
-  /* Modals */
+  .status-badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 15px; }
+  .status-global { background: rgba(34,197,94,.15); color: var(--ok); border: 1px solid var(--ok); }
+  .status-local { background: rgba(245,158,11,.15); color: var(--warn); border: 1px solid var(--warn); }
   .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
-  .modal-content { background: var(--panel); border: 1px solid var(--border); padding: 30px; border-radius: var(--radius); width: 90%; max-width: 400px; box-shadow: var(--shadow); }
+  .modal-content { background: var(--panel); border: 1px solid var(--border); padding: 30px; border-radius: var(--radius); width: 90%; max-width: 420px; box-shadow: var(--shadow); }
   .modal-content h2 { margin-top: 0; text-align: center; }
   .modal-content input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); box-sizing: border-box; }
   .modal-content button { width: 100%; padding: 12px; border-radius: 8px; border: none; background: var(--accent); color: white; font-weight: bold; cursor: pointer; }
   .error-text { color: var(--err); text-align: center; margin-bottom: 10px; display: none; font-size: 14px; }
+  .toast { position: fixed; bottom: 20px; right: 20px; background: var(--panel); border: 1px solid var(--accent); padding: 14px 20px; border-radius: 8px; box-shadow: var(--shadow); z-index: 2000; font-weight: bold; animation: slideIn 0.3s; max-width: 320px; }
+  @keyframes slideIn { from { transform: translateX(400px); } to { transform: translateX(0); } }
 </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
 <nav>
   <div class="logo">Marly's Dev Tools</div>
   <div>
@@ -88,7 +85,6 @@
   </div>
 </nav>
 
-<!-- LOGIN MODAL -->
 <div class="modal-overlay" id="login-modal">
   <div class="modal-content">
     <h2>Admin Login</h2>
@@ -106,37 +102,49 @@
 
 <div class="container">
   
-  <!-- ADMIN PANEL -->
   <div id="admin-panel">
     <h2>⚙️ Admin Dashboard</h2>
-    <p style="color:var(--muted); font-size:14px; margin-bottom:20px;">Add custom links, YouTube videos, or external projects below.</p>
-    
-    <div class="form-group">
-      <label>Project Title</label>
-      <input type="text" id="new-title" placeholder="e.g. My YouTube Tutorial">
+    <div class="admin-section">
+      <h3>🌐 Global Sync (GitHub)</h3>
+      <div id="sync-status" class="status-badge status-local">💾 Local Only</div>
+      <p style="color:var(--muted); font-size:13px; margin-bottom:15px;">
+        Global sync is active via the preloaded token. To use a different token, paste one below.
+        <br><strong style="color:var(--err);">⚠️ Never share your token publicly.</strong>
+      </p>
+      <div class="form-group">
+        <label>Override GitHub Token (optional)</label>
+        <input type="password" id="github-pat" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+        <small>Stored only in your browser. Overrides the preloaded token.</small>
+      </div>
+      <button class="btn-secondary" onclick="savePat()">💾 Save Override</button>
+      <button class="btn-secondary" onclick="clearPat()">🚫 Remove Override</button>
     </div>
-    <div class="form-group">
-      <label>Description</label>
-      <textarea id="new-desc" placeholder="A short description of what this link is..."></textarea>
+    <div class="admin-section">
+      <h3>➕ Add New Project</h3>
+      <div class="form-group">
+        <label>Project Title</label>
+        <input type="text" id="new-title" placeholder="e.g. My YouTube Tutorial">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="new-desc" placeholder="A short description..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>URL Link</label>
+        <input type="url" id="new-url" placeholder="https://youtube.com/...">
+      </div>
+      <button class="btn-save" id="add-project-btn" onclick="addCustomProject()">➕ Add Project</button>
     </div>
-    <div class="form-group">
-      <label>URL Link (https://...)</label>
-      <input type="url" id="new-url" placeholder="https://youtube.com/...">
-    </div>
-    <button class="btn-save" onclick="addCustomProject()">➕ Add Project</button>
   </div>
 
-  <!-- CUSTOM PROJECTS -->
   <div id="custom-header-container" style="display:none;">
     <h2 class="section-title">🌟 Custom Projects</h2>
     <div id="custom-projects-container" class="grid"></div>
   </div>
 
-  <!-- LATEST RELEASE SECTION -->
   <h2 class="section-title">🚀 Latest Release & What's New</h2>
-  <div id="release-container" class="loading" style="text-align:center; padding:40px; color:var(--muted);">Fetching latest release...</div>
+  <div id="release-container" style="text-align:center; padding:40px; color:var(--muted);">Fetching latest release...</div>
 
-  <!-- GITHUB PROJECTS SECTION -->
   <h2 class="section-title">📦 GitHub Repositories</h2>
   <div id="projects-container" class="grid">
     <div style="text-align:center; grid-column:1/-1; padding:40px; color:var(--muted);">Loading repositories...</div>
@@ -150,22 +158,36 @@
 // ==========================================
 const GITHUB_USERNAME = "gamesstudiomarly-design";
 const MAIN_REPO = "ZeroScript-2.0";
+const PORTFOLIO_REPO = "gamesstudiomarly-design.github.io";
+const DATA_FILE = "projects.json";
 const ADMIN_USER = "admin";
 const ADMIN_PASS = "admin123";
 
+// ⚠️⚠️⚠️ WARNING ⚠️⚠️⚠️
+// THIS TOKEN IS ALREADY COMPROMISED (posted publicly).
+// REVOKE IT NOW: https://github.com/settings/tokens
+// Then create a fine-grained token scoped ONLY to the portfolio repo.
+// See instructions at https://github.com/settings/personal-access-tokens/new
+const PRELOADED_PAT = "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";
+
+// Helper: get the active token (localStorage override wins, then preloaded)
+function getActivePat() {
+  return localStorage.getItem("zs_github_pat") || PRELOADED_PAT;
+}
+
+let globalProjects = [];
+
 // ==========================================
-// 1. AUTHENTICATION LOGIC
+// 1. AUTHENTICATION
 // ==========================================
 function checkAuth() {
   const isLoggedIn = localStorage.getItem("zs_admin_logged") === "true";
   document.getElementById("admin-panel").style.display = isLoggedIn ? "block" : "none";
   document.getElementById("login-btn").style.display = isLoggedIn ? "none" : "block";
   document.getElementById("logout-btn").style.display = isLoggedIn ? "block" : "none";
-  renderCustomProjects();
+  if (isLoggedIn) updateSyncStatus();
 }
-
 function openModal() { document.getElementById("login-modal").style.display = "flex"; }
-
 function login() {
   const u = document.getElementById("username").value;
   const p = document.getElementById("password").value;
@@ -180,71 +202,189 @@ function login() {
     document.getElementById("login-error").style.display = "block";
   }
 }
+function logout() { localStorage.removeItem("zs_admin_logged"); checkAuth(); }
 
-function logout() {
-  localStorage.removeItem("zs_admin_logged");
-  checkAuth();
+// ==========================================
+// 2. TOKEN OVERRIDE MANAGEMENT
+// ==========================================
+function savePat() {
+  const pat = document.getElementById("github-pat").value.trim();
+  if (!pat.startsWith("ghp_") && !pat.startsWith("github_pat_")) {
+    showToast("❌ Token should start with ghp_ or github_pat_", "error");
+    return;
+  }
+  localStorage.setItem("zs_github_pat", pat);
+  document.getElementById("github-pat").value = "";
+  updateSyncStatus();
+  showToast("✅ Token override saved!");
+}
+function clearPat() {
+  localStorage.removeItem("zs_github_pat");
+  updateSyncStatus();
+  showToast("Override removed. Using preloaded token.");
+}
+function updateSyncStatus() {
+  const pat = getActivePat();
+  const badge = document.getElementById("sync-status");
+  const source = localStorage.getItem("zs_github_pat") ? "custom override" : "preloaded token";
+  if (pat) {
+    badge.className = "status-badge status-global";
+    badge.textContent = `🌐 Global Mode (using ${source})`;
+  } else {
+    badge.className = "status-badge status-local";
+    badge.textContent = "💾 Local Only (no token)";
+  }
 }
 
 // ==========================================
-// 2. CUSTOM PROJECTS (Local Storage)
+// 3. LOAD / SAVE PROJECTS
 // ==========================================
-function getCustomProjects() {
-  const data = localStorage.getItem("zs_custom_projects");
-  return data ? JSON.parse(data) : [];
-}
+async function loadGlobalProjects() {
+  try {
+    const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_USERNAME}/${PORTFOLIO_REPO}/main/${DATA_FILE}?t=${Date.now()}`);
+    if (res.ok) {
+      globalProjects = await res.json();
+      if (!Array.isArray(globalProjects)) globalProjects = [];
+    } else { globalProjects = []; }
+  } catch (e) { globalProjects = []; }
 
-function addCustomProject() {
-  const title = document.getElementById("new-title").value;
-  const desc = document.getElementById("new-desc").value;
-  const url = document.getElementById("new-url").value;
-  
-  if (!title || !url) { alert("Title and URL are required!"); return; }
-  
-  const projects = getCustomProjects();
-  projects.push({ id: Date.now(), title, desc, url });
-  localStorage.setItem("zs_custom_projects", JSON.stringify(projects));
-  
-  document.getElementById("new-title").value = "";
-  document.getElementById("new-desc").value = "";
-  document.getElementById("new-url").value = "";
-  
+  const localOnly = JSON.parse(localStorage.getItem("zs_custom_projects") || "[]");
+  const pat = getActivePat();
+  if (!pat && localOnly.length > 0) {
+    const existingIds = new Set(globalProjects.map(p => p.id));
+    localOnly.forEach(p => { if (!existingIds.has(p.id)) globalProjects.push(p); });
+  }
   renderCustomProjects();
 }
 
-function deleteCustomProject(id) {
-  if (!confirm("Delete this custom project?")) return;
-  let projects = getCustomProjects();
-  projects = projects.filter(p => p.id !== id);
-  localStorage.setItem("zs_custom_projects", JSON.stringify(projects));
-  renderCustomProjects();
+async function saveProjectsToGitHub(projects) {
+  const pat = getActivePat();
+  if (!pat) {
+    localStorage.setItem("zs_custom_projects", JSON.stringify(projects));
+    return { ok: true, mode: "local" };
+  }
+  const apiUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${PORTFOLIO_REPO}/contents/${DATA_FILE}`;
+  let sha = "";
+  try {
+    const getRes = await fetch(apiUrl, {
+      headers: { Authorization: `token ${pat}`, Accept: "application/vnd.github+json" }
+    });
+    if (getRes.ok) { const data = await getRes.json(); sha = data.sha; }
+  } catch (e) {}
+
+  const json = JSON.stringify(projects, null, 2);
+  const content = btoa(unescape(encodeURIComponent(json)));
+  const body = {
+    message: `Update projects via Admin Panel (${new Date().toLocaleString()})`,
+    content: content,
+    branch: "main"
+  };
+  if (sha) body.sha = sha;
+
+  const putRes = await fetch(apiUrl, {
+    method: "PUT",
+    headers: {
+      Authorization: `token ${pat}`,
+      Accept: "application/vnd.github+json",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(body)
+  });
+
+  if (putRes.ok) { return { ok: true, mode: "global" }; }
+  else {
+    const err = await putRes.json();
+    if (putRes.status === 401 || putRes.status === 403) {
+      return { ok: false, mode: "error", error: "Token revoked or invalid. Revoke the leaked one and create a new fine-grained token." };
+    }
+    return { ok: false, mode: "error", error: err.message || "Failed to save" };
+  }
 }
 
+// ==========================================
+// 4. ADMIN ACTIONS
+// ==========================================
+async function addCustomProject() {
+  const title = document.getElementById("new-title").value.trim();
+  const desc = document.getElementById("new-desc").value.trim();
+  const url = document.getElementById("new-url").value.trim();
+  if (!title || !url) { showToast("❌ Title and URL are required!", "error"); return; }
+
+  const newProject = { id: Date.now(), title, desc, url };
+  const updated = [...globalProjects, newProject];
+
+  const btn = document.getElementById("add-project-btn");
+  btn.disabled = true;
+  btn.textContent = "Saving...";
+
+  const result = await saveProjectsToGitHub(updated);
+  btn.disabled = false;
+  btn.textContent = "➕ Add Project";
+
+  if (result.ok) {
+    globalProjects = updated;
+    document.getElementById("new-title").value = "";
+    document.getElementById("new-desc").value = "";
+    document.getElementById("new-url").value = "";
+    if (result.mode === "global") showToast("🌐 Saved globally! Refresh in ~1 min.");
+    else showToast("💾 Saved locally.");
+    renderCustomProjects();
+  } else {
+    showToast("❌ " + result.error, "error");
+  }
+}
+
+async function deleteCustomProject(id) {
+  if (!confirm("Delete this project?")) return;
+  const updated = globalProjects.filter(p => p.id !== id);
+  const result = await saveProjectsToGitHub(updated);
+  if (result.ok) {
+    globalProjects = updated;
+    if (result.mode === "global") showToast("🌐 Deleted globally!");
+    else showToast("Deleted locally.");
+    renderCustomProjects();
+  } else {
+    showToast("❌ " + result.error, "error");
+  }
+}
+
+// ==========================================
+// 5. RENDERING
+// ==========================================
 function renderCustomProjects() {
   const container = document.getElementById("custom-projects-container");
   const headerWrapper = document.getElementById("custom-header-container");
-  const projects = getCustomProjects();
   const isLoggedIn = localStorage.getItem("zs_admin_logged") === "true";
-
-  if (projects.length === 0) {
+  if (globalProjects.length === 0) {
     container.innerHTML = "";
     headerWrapper.style.display = "none";
     return;
   }
-
   headerWrapper.style.display = "block";
-  container.innerHTML = projects.map(p => `
+  container.innerHTML = globalProjects.map(p => `
     <div class="card">
       ${isLoggedIn ? `<button class="btn-delete" onclick="deleteCustomProject(${p.id})">✕</button>` : ""}
-      <h3>${p.title}</h3>
-      <p>${p.desc || "No description provided."}</p>
-      <a href="${p.url}" target="_blank" class="card-btn" style="text-decoration:none;">Open Link</a>
+      <h3>${escapeHtml(p.title)}</h3>
+      <p>${escapeHtml(p.desc || "No description provided.")}</p>
+      <a href="${escapeHtml(p.url)}" target="_blank" class="card-btn" style="text-decoration:none;">Open Link</a>
     </div>
   `).join('');
 }
 
+function escapeHtml(s) {
+  return String(s || "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+function showToast(msg, type = "ok") {
+  const t = document.createElement("div");
+  t.className = "toast";
+  t.textContent = msg;
+  if (type === "error") { t.style.borderColor = "var(--err)"; t.style.color = "var(--err)"; }
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 4000);
+}
+
 // ==========================================
-// 3. FETCH GITHUB RELEASE
+// 6. GITHUB RELEASE + REPOS
 // ==========================================
 async function loadLatestRelease() {
   const container = document.getElementById('release-container');
@@ -252,53 +392,40 @@ async function loadLatestRelease() {
     const res = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${MAIN_REPO}/releases/latest`);
     if (!res.ok) throw new Error("No releases");
     const release = await res.json();
-    
-    let notes = release.body || "No release notes provided.";
+    let notes = release.body || "No release notes.";
     let downloads = "";
     if (release.assets && release.assets.length > 0) {
       downloads = release.assets.map(a => `<a href="${a.browser_download_url}" class="dl-btn" target="_blank">⬇ Download ${a.name}</a>`).join('');
     } else {
       downloads = `<a href="${release.html_url}" class="dl-btn" target="_blank">View Release on GitHub</a>`;
     }
-    
     container.innerHTML = `
       <div class="release-box">
         <div class="release-header">
           <h3 class="release-title">${release.name || "Latest Update"}</h3>
           <span class="release-tag">${release.tag_name}</span>
         </div>
-        <div class="release-notes">${notes}</div>
+        <div class="release-notes">${escapeHtml(notes)}</div>
         <div class="downloads">${downloads}</div>
       </div>
     `;
   } catch(e) {
-    container.innerHTML = `
-      <div class="release-box">
-        <p style="color:var(--err)">Could not load latest release (API rate limit or network error).</p>
-        <div class="downloads">
-          <a href="https://github.com/${GITHUB_USERNAME}/${MAIN_REPO}/releases" class="dl-btn" target="_blank">View Releases on GitHub</a>
-        </div>
-      </div>
-    `;
+    container.innerHTML = `<div class="release-box"><p style="color:var(--err)">Could not load release. <a href="https://github.com/${GITHUB_USERNAME}/${MAIN_REPO}/releases" style="color:var(--accent)">View on GitHub →</a></p></div>`;
   }
 }
 
-// ==========================================
-// 4. FETCH GITHUB REPOS
-// ==========================================
-async function loadProjects() {
+async function loadRepos() {
   const container = document.getElementById('projects-container');
   try {
     const res = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=6`);
     if (!res.ok) throw new Error("API Limit");
     const repos = await res.json();
-    
     container.innerHTML = repos.map(repo => {
       if (repo.name.includes(".github.io")) return "";
       return `
         <a href="${repo.html_url}" target="_blank" class="card">
-          <h3>${repo.name}</h3>
-          <p>${repo.description || "No description provided."}</p>
+          <h3>${escapeHtml(repo.name)}</h3>
+          <p>${escapeHtml(repo.description || "No description.")}</p>
           <div class="card-stats">
             <span>⭐ ${repo.stargazers_count}</span>
             <span>🍴 ${repo.forks_count}</span>
@@ -309,14 +436,17 @@ async function loadProjects() {
       `;
     }).join('');
   } catch(e) {
-    container.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:var(--err);">GitHub API rate limit reached. <a href="https://github.com/${GITHUB_USERNAME}" style="color:var(--accent)">View Profile</a></p>`;
+    container.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:var(--err);">GitHub API rate limit. <a href="https://github.com/${GITHUB_USERNAME}" style="color:var(--accent)">View Profile →</a></p>`;
   }
 }
 
-// Initialize
+// ==========================================
+// INIT
+// ==========================================
 checkAuth();
+loadGlobalProjects();
 loadLatestRelease();
-loadProjects();
+loadRepos();
 </script>
 </body>
 </html>
