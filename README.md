@@ -40,7 +40,7 @@ The site includes a hidden Admin Dashboard to manage custom links, YouTube video
 - **Login:** Click the "🔒 Admin Login" button in the top right.
 - **Credentials:** 
   - **Username:** `admin`
-  - **Password:** `admin123`
+  - **Password:** `**************`
 - **How it works:** Once logged in, the Admin Panel appears at the top. You can add custom projects (Title, Description, URL). These are saved to your browser's `localStorage`. When logged in, a red "✕" button appears on custom cards so you can delete them.
 
 > ⚠️ **Note on Admin Data:** Because GitHub Pages is static (no database), projects added via the Admin Panel are saved *only in your specific browser*. If you visit the site on another device, those custom links won't appear. This is intended for previewing links before hardcoding them or sharing them locally.
