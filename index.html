@@ -260,45 +260,71 @@ async function loadGlobalProjects() {
 async function saveProjectsToGitHub(projects) {
   const pat = getActivePat();
   if (!pat) {
-    localStorage.setItem("zs_custom_projects", JSON.stringify(projects));
-    return { ok: true, mode: "local" };
+    showToast("❌ No token. Paste one in Admin Panel first.", "error");
+    return { ok: false, mode: "error", error: "no token" };
   }
+
   const apiUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${PORTFOLIO_REPO}/contents/${DATA_FILE}`;
-  let sha = "";
+
+  // 1. Get the repo's default branch (usually "main")
+  let branch = "main";
   try {
-    const getRes = await fetch(apiUrl, {
-      headers: { Authorization: `token ${pat}`, Accept: "application/vnd.github+json" }
+    const repoRes = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${PORTFOLIO_REPO}`, {
+      headers: { "Authorization": `Bearer ${pat}`, "Accept": "application/vnd.github+json" }
     });
-    if (getRes.ok) { const data = await getRes.json(); sha = data.sha; }
+    if (repoRes.ok) {
+      const repoData = await repoRes.json();
+      branch = repoData.default_branch || "main";
+    }
   } catch (e) {}
 
+  // 2. Check if the file already exists (to get its SHA for update)
+  let sha = null;
+  try {
+    const getRes = await fetch(`${apiUrl}?ref=${branch}`, {
+      headers: { "Authorization": `Bearer ${pat}`, "Accept": "application/vnd.github+json" }
+    });
+    if (getRes.ok) {
+      const data = await getRes.json();
+      sha = data.sha;
+    }
+    // If 404, file doesn't exist yet — we'll CREATE it (no SHA needed)
+  } catch (e) {}
+
+  // 3. Build the PUT request
   const json = JSON.stringify(projects, null, 2);
   const content = btoa(unescape(encodeURIComponent(json)));
   const body = {
-    message: `Update projects via Admin Panel (${new Date().toLocaleString()})`,
+    message: `Update projects (${new Date().toISOString().slice(0, 19)})`,
     content: content,
-    branch: "main"
+    branch: branch
   };
   if (sha) body.sha = sha;
 
+  // 4. Send the PUT request
   const putRes = await fetch(apiUrl, {
     method: "PUT",
     headers: {
-      Authorization: `token ${pat}`,
-      Accept: "application/vnd.github+json",
+      "Authorization": `Bearer ${pat}`,
+      "Accept": "application/vnd.github+json",
       "Content-Type": "application/json"
     },
     body: JSON.stringify(body)
   });
 
-  if (putRes.ok) { return { ok: true, mode: "global" }; }
-  else {
-    const err = await putRes.json();
-    if (putRes.status === 401 || putRes.status === 403) {
-      return { ok: false, mode: "error", error: "Token revoked or invalid. Revoke the leaked one and create a new fine-grained token." };
-    }
-    return { ok: false, mode: "error", error: err.message || "Failed to save" };
+  if (putRes.ok) {
+    return { ok: true, mode: "global", created: !sha };
   }
+
+  const err = await putRes.json().catch(() => ({ message: "Unknown error" }));
+  let msg = err.message || "Failed";
+  if (putRes.status === 401) msg = "Token invalid or revoked (401)";
+  else if (putRes.status === 403) msg = "Missing 'Contents: Read and write' permission (403)";
+  else if (putRes.status === 404) msg = "Repo not found or no access (404)";
+  else if (putRes.status === 409) msg = "File conflict, try again (409)";
+  else if (putRes.status === 422) msg = "Invalid request (422)";
+
+  return { ok: false, mode: "error", error: `${putRes.status}: ${msg}` };
 }
 
 // ==========================================
